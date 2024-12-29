@@ -31,7 +31,7 @@ sudo apt install curl git jq build-essential gcc unzip wget lz4 -y
 ### 2. ติดตั้ง Go
 ```bash
 cd $HOME && \
-ver="1.22.0" && \
+ver="1.22.3" && \
 wget "https://golang.org/dl/go$ver.linux-amd64.tar.gz" && \
 sudo rm -rf /usr/local/go && \
 sudo tar -C /usr/local -xzf "go$ver.linux-amd64.tar.gz" && \
@@ -45,17 +45,28 @@ go version
 
 ### 3. ดาวโหลดและติดตั้ง Story-Geth
 ```bash
-wget -q https://story-geth-binaries.s3.us-west-1.amazonaws.com/geth-public/geth-linux-amd64-0.9.2-ea9f0d2.tar.gz -O /tmp/geth-linux-amd64-0.9.2-ea9f0d2.tar.gz
-tar -xzf /tmp/geth-linux-amd64-0.9.2-ea9f0d2.tar.gz -C /tmp
+wget https://github.com/piplabs/story-geth/releases/download/v0.11.0/geth-linux-amd64
 [ ! -d "$HOME/go/bin" ] && mkdir -p $HOME/go/bin
-sudo cp /tmp/geth-linux-amd64-0.9.2-ea9f0d2/geth $HOME/go/bin/story-geth
+if ! grep -q "$HOME/go/bin" $HOME/.bash_profile; then
+  echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bash_profile
+fi
+chmod +x geth-linux-amd64
+mv $HOME/geth-linux-amd64 $HOME/go/bin/story-geth
+source $HOME/.bash_profile
 ```
 
 ### 4. ดาวโหลดและติดตั้ง Story
 ```bash
-wget -q https://story-geth-binaries.s3.us-west-1.amazonaws.com/story-public/story-linux-amd64-0.9.11-2a25df1.tar.gz -O /tmp/story-linux-amd64-0.9.11-2a25df1.tar.gz
-tar -xzf /tmp/story-linux-amd64-0.9.11-2a25df1.tar.gz -C /tmp
-sudo cp /tmp/story-linux-amd64-0.9.11-2a25df1/story $HOME/go/bin/story
+cd $HOME
+rm -rf story-linux-amd64
+wget https://github.com/piplabs/story/releases/download/v0.13.0/story-linux-amd64
+[ ! -d "$HOME/go/bin" ] && mkdir -p $HOME/go/bin
+if ! grep -q "$HOME/go/bin" $HOME/.bash_profile; then
+  echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bash_profile
+fi
+chmod +x story-linux-amd64
+sudo cp $HOME/story-linux-amd64 $HOME/go/bin/story
+source $HOME/.bash_profile
 ```
 
 ### 5. เริ่ม อินนิเชียลไลซ์ Story Iliad Network Node
